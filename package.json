@@ -1,6 +1,7 @@
 {
   "name": "azcore_api",
   "version": "1.0.0",
+  "type": "module",
   "description": "An API written in Node to be used as a backend for servers running AzerothCore.",
   "main": "server.js",
   "scripts": {
