@@ -1,0 +1,29 @@
+{
+  "name": "azcore_api",
+  "version": "1.0.0",
+  "description": "An API written in Node to be used as a backend for servers running AzerothCore.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mitblan/azCoreAPI.git"
+  },
+  "keywords": [
+    "Azeroth",
+    "Core",
+    "World",
+    "of",
+    "Warcraft",
+    "API",
+    "Nodejs",
+    "Express"
+  ],
+  "author": "Mitchell Blankenship",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mitblan/azCoreAPI/issues"
+  },
+  "homepage": "https://github.com/mitblan/azCoreAPI#readme"
+}
