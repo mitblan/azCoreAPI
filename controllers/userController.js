@@ -129,8 +129,8 @@ const registerUser = asyncHandler( async ( req, res ) => {
 //=============================================================================
 const getProfile = asyncHandler( async ( req, res ) => { 
   console.log(req.user)
-  // Find the user by id
-  const user = await User.findByPk( req.user.id, { attributes: { exclude: [ 'password' ] } } )
+  // Get user info from the request including gmlevel
+  const user = req.user
 
   // Get the users Account
   const account = await Account.findByPk( user.account_id )

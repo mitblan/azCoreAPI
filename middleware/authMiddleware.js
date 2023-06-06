@@ -1,10 +1,23 @@
+//=============================================================================
+// AzerothCoreAPI
+// authMiddleware.js
+// www.azerothcore.org
+// Written by Mitchell Blankenship
+//=============================================================================
+
+//=============================================================================
+// Dependencies
+//=============================================================================
 import jwt from 'jsonwebtoken'
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 import dotenv from 'dotenv'
+import Access from '../models/accountLevelModel.js'
 dotenv.config()
 
+//=============================================================================
 // User must be authenticated
+//=============================================================================
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
@@ -16,6 +29,9 @@ const protect = asyncHandler(async (req, res, next) => {
       const decoded = jwt.verify( token, process.env.APP_SECRET );
 
       req.user = await User.findByPk( decoded.userId, { attributes: { exclude: [ 'password' ] } } )
+      
+      const gmLevel = await Access.findByPk( req.user.account_id, {attributes: {exclude: ['id']}} )
+      req.user.dataValues.gmlevel = gmLevel.gmlevel
 
       next();
     } catch (error) {
@@ -29,14 +45,52 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-// User must be an admin
-const admin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
+//=============================================================================
+// User must be gmlevel 1 or greater
+//=============================================================================
+const gm1 = ( req, res, next ) => {
+  if(req.user && req.user.dataValues.gmlevel >= 1) {
     next();
   } else {
-    res.status(401);
-    throw new Error('Not authorized as an admin');
+    res.status( 401 );
+    throw new Error( 'Not authorized as a Apprentice GM' );
   }
-};
+}
 
-export { protect, admin };
+//=============================================================================
+// User must be gmlevel 2 or greater
+//=============================================================================
+const gm2 = ( req, res, next ) => {
+  if(req.user && req.user.dataValues.gmlevel >= 2) {
+    next();
+  } else {
+    res.status( 401 );
+    throw new Error( 'Not authorized as a Senior GM' );
+  }
+}
+
+//=============================================================================
+// User must be gmlevel 3 or greater
+//=============================================================================
+const gm3 = ( req, res, next ) => {
+  if(req.user && req.user.dataValues.gmlevel >= 3) {
+    next();
+  } else {
+    res.status( 401 );
+    throw new Error( 'Not authorized as a Lead GM' );
+  }
+}
+
+//=============================================================================
+// User must be gmlevel 4 or greater
+//=============================================================================
+const gm4 = ( req, res, next ) => {
+  if(req.user && req.user.dataValues.gmlevel >= 4) {
+    next();
+  } else {
+    res.status( 401 );
+    throw new Error( 'Not authorized as a Server Admin' );
+  }
+}
+
+export { protect, gm1, gm2, gm3, gm4 };

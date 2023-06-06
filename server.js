@@ -31,8 +31,9 @@ app.use(cookieParser())
 app.use( '/api/users', userRoutes )
 
 app.get( '/', ( req, res ) => {
+  console.log(req.cookies)
   res.json( { message: 'Welcome to AzerothCoreAPI' } )
-})
+} )
 
 //=============================================================================
 // Start Server
