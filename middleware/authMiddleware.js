@@ -30,8 +30,13 @@ const protect = asyncHandler(async (req, res, next) => {
 
       req.user = await User.findByPk( decoded.userId, { attributes: { exclude: [ 'password' ] } } )
       
-      const gmLevel = await Access.findByPk( req.user.account_id, {attributes: {exclude: ['id']}} )
-      req.user.dataValues.gmlevel = gmLevel.gmlevel
+      const gmLevel = await Access.findByPk( req.user.account_id, { attributes: { exclude: [ 'id' ] } } )
+      if ( gmLevel === null ) {
+        req.user.dataValues.gmlevel = 0
+      } else {
+        req.user.dataValues.gmlevel = gmLevel.gmlevel
+      }
+      
 
       next();
     } catch (error) {

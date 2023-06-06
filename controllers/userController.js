@@ -16,6 +16,7 @@ import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
 import Account from '../models/accountModel.js'
 import Character from '../models/characterModel.js'
+import Command from '../models/commandModel.js'
 
 //=============================================================================
 // @desc:   Get a list of all users
@@ -138,9 +139,14 @@ const getProfile = asyncHandler( async ( req, res ) => {
   // Get the users characters
   const characters = await Character.findAll( { where: { account: user.account_id } } )
 
+  // Get available commands
+  const commands = await Command.findAll( { where: { security: { [ Op.lte ]: user.dataValues.gmlevel } } } )
+  console.log(user)
+
+
   // If the user and account exist, send the response
   if ( user && account ) {
-    res.json({user, account, characters})
+    res.json({user, account, characters, commands})
   } else {
     res.status( 404 )
     throw new Error( 'User not found' )
