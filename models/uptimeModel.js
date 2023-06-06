@@ -22,8 +22,12 @@ const Uptime = auth.define(
     uptime: {
       type: Sequelize.INTEGER,
       allowNull: false,      
+    },
+    revision: {
+      type: Sequelize.STRING,
+      allowNull: false,
     }
-  },
+},
   {
     freezeTableName: true,
     timestamps: false
