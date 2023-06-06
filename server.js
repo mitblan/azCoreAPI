@@ -11,6 +11,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoutes.js'
+import siteRoutes from './routes/siteRoutes.js'
 import cookieParser from 'cookie-parser'
 dotenv.config()
 
@@ -29,6 +30,7 @@ app.use(cookieParser())
 // Routes
 //=============================================================================
 app.use( '/api/users', userRoutes )
+app.use('/api', siteRoutes)
 
 app.get( '/', ( req, res ) => {
   console.log(req.cookies)
