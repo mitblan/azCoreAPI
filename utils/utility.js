@@ -1,3 +1,5 @@
+import { DataTypes } from "sequelize"
+
 const charClass = {
 	1: 'Warrior',
 	2: 'Paladin',
@@ -27,13 +29,17 @@ const charRace = {
 }
 
 const uptimeCalculation = ( uptime ) => {
-	const totalMinutes = Math.floor( uptime / 60 )
-	
-	const seconds = uptime % 60
-	const hours = Math.floor( totalMinutes / 60 )
-	const minutes = totalMinutes % 60
-	
-	return {h: hours, m: minutes, s: seconds}
+	// uptime is in seconds
+	const totalSeconds = Number( uptime )
+
+	// calculate days, hours, minutes, seconds
+	var d = Math.floor( totalSeconds / ( 3600 * 24 ) )
+	var h = Math.floor( totalSeconds % ( 3600 * 24 ) / 3600 )
+	var m = Math.floor( totalSeconds % 3600 / 60 )
+	var s = Math.floor( totalSeconds % 60 )
+
+	return { d, h, m, s }
+
 }
 
 const dateFromTimestamp = ( unixTime ) => {
