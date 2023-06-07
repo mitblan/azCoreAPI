@@ -32,11 +32,11 @@ const User = site.define( 'user', {
   },
   password: {
     type: Sequelize.STRING,
-    set( value ) {
-      const salt = bcrypt.genSaltSync(10)
-      const hash = bcrypt.hashSync( value, salt )
-      this.setDataValue('password', hash)
-    }
+    // set( value ) {
+    //   const salt = bcrypt.genSaltSync(10)
+    //   const hash = bcrypt.hashSync( value, salt )
+    //   this.setDataValue('password', hash)
+    // }
   },
   account_id: {
     type: Sequelize.INTEGER,
@@ -46,6 +46,13 @@ const User = site.define( 'user', {
 User.prototype.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password)
 }
+
+User.beforeSave( async ( user, options ) => {
+  if ( user.changed( 'password' ) ) {
+    const salt = await bcrypt.genSalt( 10 )
+    user.password = await bcrypt.hash( user.password, salt )
+  }
+} )
 
 
 export default User

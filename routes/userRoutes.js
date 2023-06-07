@@ -9,14 +9,15 @@
 // Dependencies
 //===================================================================
 import express from 'express'
-import { getUsers, registerUser, authUser, logoutUser, getProfile } from '../controllers/userController.js'
+import { getUsers, registerUser, authUser, logoutUser, getProfile, getUserChars, editProfile } from '../controllers/userController.js'
 import { protect, gm1, gm2, gm3, gm4 } from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
-router.route( '/' ).get( getUsers ).post( registerUser )
+router.route( '/' ).get( protect, gm1, getUsers ).post( registerUser )
 router.post( '/login', authUser )
 router.post( '/logout', protect, logoutUser )
 router.get( '/profile', protect, getProfile )
+router.get( '/:id', protect, gm1, getUserChars).put('/profile', protect, editProfile)
 
 export default router

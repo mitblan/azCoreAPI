@@ -27,7 +27,20 @@ const getUsers = asyncHandler( async ( req, res ) => {
   const users = await User.findAll( {
     attributes: { exclude: [ 'password' ] },
   } )
-  res.json( users )
+  res.status(200).json( users )
+} )
+
+//=============================================================================
+// @desc:   Get a list of all of a users characters
+// @route:  GET /api/users/:id
+// @access: Private/Staff
+//=============================================================================
+const getUserChars = asyncHandler( async ( req, res ) => { 
+  const user = await User.findByPk( req.params.id )
+  const chars = await Character.findAll( {
+    where: { account: user.account_id },
+  } )
+  res.status(200).json( chars )
 } )
 
 //=============================================================================
@@ -129,7 +142,6 @@ const registerUser = asyncHandler( async ( req, res ) => {
 // @access: Private
 //=============================================================================
 const getProfile = asyncHandler( async ( req, res ) => { 
-  console.log(req.user)
   // Get user info from the request including gmlevel
   const user = req.user
 
@@ -152,5 +164,46 @@ const getProfile = asyncHandler( async ( req, res ) => {
     throw new Error( 'User not found' )
   }
 } )
+
+//=============================================================================
+// @desc:   Edit a user's profile
+// @route:  PUT /api/users/profile
+// @access: Private
+//=============================================================================
+const editProfile = asyncHandler( async ( req, res ) => {
+  // Get user info from the request
+  const user = req.user
+
+  // get form data from the request
+  const { username, email, password } = req.body
+
+  // Get the users account
+  const account = await User.findByPk( user.id )
+
+  // If the user exists, update the account
+  if ( user ) {
+    user.username = username || user.username
+    user.email = email || user.email
+    if ( password ) {
+      user.password = password
+    }
+    const updatedUser = await user.save()
+    generateToken( res, updatedUser.id )
+    res.json( {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      account_id: updatedUser.account_id,
+    } )
+  } else {
+    res.status( 404 )
+    throw new Error( 'User not found' )
+  }
+
+} )
+
+//=============================================================================
+// Export the functions
+//=============================================================================
  
-export { getUsers, registerUser, authUser, logoutUser, getProfile}
+export { getUsers, registerUser, authUser, logoutUser, getProfile, getUserChars, editProfile}
