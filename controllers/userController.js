@@ -37,10 +37,11 @@ const getUsers = asyncHandler( async ( req, res ) => {
 //=============================================================================
 const getUserChars = asyncHandler( async ( req, res ) => { 
   const user = await User.findByPk( req.params.id )
+  const account = await Account.findByPk( user.account_id )
   const chars = await Character.findAll( {
     where: { account: user.account_id },
   } )
-  res.status(200).json( chars )
+  res.status(200).json( {user, account, chars} )
 } )
 
 //=============================================================================

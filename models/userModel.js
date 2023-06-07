@@ -32,11 +32,6 @@ const User = site.define( 'user', {
   },
   password: {
     type: Sequelize.STRING,
-    // set( value ) {
-    //   const salt = bcrypt.genSaltSync(10)
-    //   const hash = bcrypt.hashSync( value, salt )
-    //   this.setDataValue('password', hash)
-    // }
   },
   account_id: {
     type: Sequelize.INTEGER,
