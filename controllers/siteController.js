@@ -26,9 +26,9 @@ const getStatus = asyncHandler( async ( req, res ) => {
     order: [ [ 'starttime', 'DESC' ] ]
   } )
 
-  const chars = await Character.findAll( { where: { online: 1 } } )
+  // const chars = await Character.findAll( { where: { online: 1 } } )
 
-  const { count } = await Character.findAndCountAll( { where: { online: 1 } } )
+  const {count, rows} = await Character.findAndCountAll( { where: { online: 1 } } )
 
   const realmUptime = uptimeCalculation( uptime.uptime )
   const startTime = dateFromTimestamp( uptime.starttime )
@@ -38,7 +38,7 @@ const getStatus = asyncHandler( async ( req, res ) => {
     startTime: startTime,
     online: count,
     realmName: name,
-    onlineChars: chars
+    onlineChars: rows
   }
 
   if ( realmStatus ) {
