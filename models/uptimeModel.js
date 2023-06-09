@@ -14,6 +14,9 @@ import {auth} from '../utils/database.js'
 const Uptime = auth.define(
   'uptime',
   {
+    realmid: {
+      type: Sequelize.INTEGER,
+    },
     starttime: {
       type: Sequelize.INTEGER,
       primaryKey: true,
